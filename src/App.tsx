@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+import React, { memo, useEffect, useLayoutEffect, useState } from "react";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import Login from "./Pages/Login";
+import Test from "./Pages/Test";
+import { useTypedSelector } from "./Store/rootReducer";
 
 function App() {
+  const user = useTypedSelector((s) => s.user);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user.login) return navigate("/login");
+    else return navigate("/");
+  }, [user]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="">
+      <Routes location={location} key={location.pathname}>
+        <Route index element={<Test />} />
+        <Route path="login" element={<Login />} />
+      </Routes>
     </div>
   );
 }
 
-export default App;
+export default memo(App);
