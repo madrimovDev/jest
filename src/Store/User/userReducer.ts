@@ -1,33 +1,40 @@
-
-export enum UserTypes {
-  LOGIN, LOGOUT
+export enum UserActionTypes {
+  login = 'login',
+  logout = 'logout',
 }
 
 export type User = {
-  name: string,
-  surname: string,
-  date: string
+  name: string
+  surname: string
 }
 
 export type UserState = {
-  login: boolean,
-  user: User | undefined
+  isLogin: boolean
+  date: string
+  user: User
 }
 
 export type UserAction = {
-  type: UserTypes,
-  payload: User | undefined
+  type: UserActionTypes
+  user: User
 }
 
 const initialState: UserState = {
-  login: false,
-  user: undefined
+  date: '',
+  isLogin: false,
+  user: {
+    name: '',
+    surname: '',
+  },
 }
 
-export const userReducer = (state: UserState = initialState, action: UserAction): UserState => {
+export const userReducer = (state = initialState, action: UserAction): UserState => {
   switch (action.type) {
-    case UserTypes.LOGIN: return { login: true, user: action.payload }
-    case UserTypes.LOGOUT: return { login: false, user: action.payload }
-    default: return state
+    case UserActionTypes.login:
+      return { isLogin: true, date: new Date().toDateString(), user: action.user }
+    case UserActionTypes.logout:
+      return { isLogin: false, date: '', user: { name: '', surname: '' } }
+    default:
+      return state
   }
 }
